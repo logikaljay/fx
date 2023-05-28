@@ -18,12 +18,16 @@
   },
   "scripts": {
     "dev": "tsup --watch",
+    "lint": "tsc",
     "build": "tsup",
     "clean": "rm -rf dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "fastify-type-provider-zod": "^1.1.9"
+  },
   "peerDependencies": {
     "fastify": "^4",
     "zod": "^3",
@@ -37,8 +41,5 @@
     "typescript": "^5.0.4",
     "esbuild": "^0.17.19",
     "zod": "^3.21.4"
-  },
-  "dependencies": {
-    "fastify-type-provider-zod": "^1.1.9"
   }
 }

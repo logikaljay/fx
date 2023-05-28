@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "moduleResolution": "nodenext",
-    "strict": true
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
   },
   "exclude": ["dist", "node_modules"]
 }
