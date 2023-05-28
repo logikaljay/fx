@@ -1,0 +1,37 @@
+{
+  "name": "@5oo/fx",
+  "version": "0.0.0",
+  "private": false,
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "fx": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsup src --splitting  --format esm,cjs --dts --watch --target node18 --external esbuild --clean",
+    "build": "tsup src --splitting --format esm,cjs --dts --target node18 --external esbuild --clean",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "fastify": "^4",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.4",
+    "cac": "^6.7.14",
+    "fastify": "^4.17.0",
+    "semantic-release": "^21.0.2",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
+  },
+  "dependencies": {
+    "esbuild": "^0.17.19",
+    "fastify-type-provider-zod": "^1.1.9"
+  }
+}

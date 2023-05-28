@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "strict": true
+  },
+  "exclude": ["dist", "node_modules"]
+}
