@@ -5,6 +5,8 @@ on:
     branches:
       - master
 
+permissions: write-all
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -45,6 +47,9 @@ jobs:
 
       - name: Install
         run: pnpm install
+
+      - name: Build
+        run: pnpm run build
 
       - name: Semantic Release
         id: version
