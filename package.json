@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "files": ["dist"],
   "publishConfig": {
     "access": "public"
   },
@@ -16,8 +17,8 @@
     "url": "git://github.com/logikaljay/fx"
   },
   "scripts": {
-    "dev": "tsup src --splitting  --format esm,cjs --dts --watch --target node18 --external esbuild,tsup --clean",
-    "build": "tsup src --splitting --format esm,cjs --dts --target node18 --external esbuild,tsup --clean",
+    "dev": "tsup --watch",
+    "build": "tsup",
     "clean": "rm -rf dist"
   },
   "keywords": [],

@@ -23,18 +23,21 @@ async function handler(opts: any) {
     `,
 
     'index.ts': `
-    import type { FastifyRequest } from "fastify"
     import { http } from "@5oo/fx"
-
-    type ExampleRequest = FastifyRequest<{
-      Querystring: {
-        name: string
+    import { z } from "zod"
+    
+    http.route({
+      method: 'GET',
+      url: '/:name',
+      schema: {
+        querystring: z.object({
+          name: z.string()
+        })
+      },
+      handler: (req, reply) => {
+        return reply.send({ name: req.query.name })
       }
-    }>
-
-    http.get('/*', (req: ExampleRequest, reply) => {
-      reply.send({ foo: 'bar', name: req.query.name })
-    })
+    })    
     `,
 
     'package.json': `

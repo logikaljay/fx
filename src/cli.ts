@@ -1,6 +1,9 @@
+#!/usr/bin/env node
+
 import { cac } from 'cac'
 
 import dev from "./commands/dev"
+import build from "./commands/build"
 
 const cli = cac()
 
@@ -11,7 +14,8 @@ function register(mod: any) {
 async function main() {
 
   [
-    dev
+    dev,
+    build,
   ].map(register)
 
   cli.name = 'fx'
