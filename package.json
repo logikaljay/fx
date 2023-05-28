@@ -12,6 +12,9 @@
   "bin": {
     "fx": "./dist/cli.js"
   },
+  "repository": {
+    "url": "git://github.com/logikaljay/fx"
+  },
   "scripts": {
     "dev": "tsup src --splitting  --format esm,cjs --dts --watch --target node18 --external esbuild --clean",
     "build": "tsup src --splitting --format esm,cjs --dts --target node18 --external esbuild --clean",
