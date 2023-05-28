@@ -16,8 +16,8 @@
     "url": "git://github.com/logikaljay/fx"
   },
   "scripts": {
-    "dev": "tsup src --splitting  --format esm,cjs --dts --watch --target node18 --external esbuild --clean",
-    "build": "tsup src --splitting --format esm,cjs --dts --target node18 --external esbuild --clean",
+    "dev": "tsup src --splitting  --format esm,cjs --dts --watch --target node18 --external esbuild,tsup --clean",
+    "build": "tsup src --splitting --format esm,cjs --dts --target node18 --external esbuild,tsup --clean",
     "clean": "rm -rf dist"
   },
   "keywords": [],
@@ -25,7 +25,8 @@
   "license": "ISC",
   "peerDependencies": {
     "fastify": "^4",
-    "zod": "^3"
+    "zod": "^3",
+    "tsup": "^6"
   },
   "devDependencies": {
     "@types/node": "^20.2.4",
@@ -33,10 +34,10 @@
     "fastify": "^4.17.0",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
+    "esbuild": "^0.17.19",
     "zod": "^3.21.4"
   },
   "dependencies": {
-    "esbuild": "^0.17.19",
     "fastify-type-provider-zod": "^1.1.9"
   }
 }
