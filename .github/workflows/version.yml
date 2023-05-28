@@ -46,19 +46,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install
-        run: pnpm install
-
-      - name: Lint
-        run: pnpm lint
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm build
-
-      - name: Semantic Release
-        id: version
-        uses: cycjimmy/semantic-release-action@v3
-        env:
-          DOCKER_REGISTRY_USER: ${{ github.actor }}
-          DOCKER_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm ci
