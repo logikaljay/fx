@@ -6,6 +6,9 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "fx": "./dist/cli.js"
   },
@@ -25,7 +28,6 @@
     "@types/node": "^20.2.4",
     "cac": "^6.7.14",
     "fastify": "^4.17.0",
-    "semantic-release": "^21.0.2",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
     "zod": "^3.21.4"
