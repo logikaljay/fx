@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 18.x
           cache: "pnpm"
-      - run: pnpm install --froze-lockfile
+      - run: pnpm i --frozen-lockfile
       - name: Create Release PR or Publish
         id: changesets
         uses: changesets/action@v1
