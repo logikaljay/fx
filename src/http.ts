@@ -1,10 +1,17 @@
-import fastify, { ContextConfigDefault, FastifyInstance, FastifySchema, RawReplyDefaultExpression, RawRequestDefaultExpression, RawServerDefault, RouteGenericInterface, RouteOptions } from "fastify"
+import fastify, { 
+  ContextConfigDefault, FastifyInstance, FastifySchema, 
+  RawReplyDefaultExpression, RawRequestDefaultExpression, 
+  RawServerDefault, RouteGenericInterface, RouteOptions 
+} from "fastify"
 import { ZodTypeProvider, serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import wellKnownPlugin from "./plugins/well-known";
 import { loadConfig } from "./config";
+import routes from "./plugins/routes";
 
 async function createApp() {
-  let app = fastify().withTypeProvider<ZodTypeProvider>()
+  let app = fastify({
+    exposeHeadRoutes: false
+  }).withTypeProvider<ZodTypeProvider>()
   
   app.setErrorHandler((error, request, reply) => {
     reply.status(400).send({
@@ -13,6 +20,7 @@ async function createApp() {
     });
   });
 
+  app.register(routes)
   app.register(wellKnownPlugin)
   
   app.setValidatorCompiler(validatorCompiler)
@@ -57,7 +65,6 @@ export async function route<
     method: 'GET',
   })
 
-  
   let info = await app.listen({
     host: config?.host,
     port: config?.port
