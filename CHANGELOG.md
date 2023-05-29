@@ -1,5 +1,11 @@
 # @5oo/fx
 
+## 0.1.7
+
+### Patch Changes
+
+- a28c828: output schema as openapi3 in .well-known
+
 ## 0.1.6
 
 ### Patch Changes
