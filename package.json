@@ -28,7 +28,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "fastify-type-provider-zod": "^1.1.9"
+    "bundle-require": "^4.0.1",
+    "fastify-type-provider-zod": "^1.1.9",
+    "load-tsconfig": "^0.2.5"
   },
   "peerDependencies": {
     "fastify": "^4",

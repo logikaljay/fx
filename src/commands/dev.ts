@@ -17,7 +17,7 @@ async function handler(opts: any) {
     format: 'cjs',
     target: 'node18',
     platform: 'node',
-    external: ['esbuild'],
+    external: ['esbuild', 'tsup'],
     clean: true,
     watch: true,
     onSuccess: async () => {

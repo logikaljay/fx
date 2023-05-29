@@ -1,44 +1,40 @@
 import fastify, { ContextConfigDefault, FastifyInstance, FastifySchema, RawReplyDefaultExpression, RawRequestDefaultExpression, RawServerDefault, RouteGenericInterface, RouteOptions } from "fastify"
 import { ZodTypeProvider, serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
-import z from "zod";
+import wellKnownPlugin from "./plugins/well-known";
+import { loadConfig } from "./config";
 
-function getPort(): number {
-  return Number.parseInt(process.env.PORT || "3000", 10);
+async function createApp() {
+  let app = fastify().withTypeProvider<ZodTypeProvider>()
+  
+  app.setErrorHandler((error, request, reply) => {
+    reply.status(400).send({
+      message: "Validation error",
+      errors: JSON.parse(error.message),
+    });
+  });
+
+  app.register(wellKnownPlugin)
+  
+  app.setValidatorCompiler(validatorCompiler)
+  app.setSerializerCompiler(serializerCompiler)
+
+  return app
 }
 
-let app = fastify().withTypeProvider<ZodTypeProvider>()
-
-app.setErrorHandler((error, request, reply) => {
-  reply.status(400).send({
-    message: "Validation error",
-    errors: JSON.parse(error.message),
-  });
-});
-
-
-app.setValidatorCompiler(validatorCompiler)
-app.setSerializerCompiler(serializerCompiler)
-
-app.route({
-  url: '/fdsa',
-  method: 'GET',
-  schema: {
-    querystring: z.object({
-      name: z.string()
-    })
-  },
-  handler: (req, reply) => {
-    req.query.name
-  }
-})
 
 export async function register(fn: (app: FastifyInstance) => Promise<void>) {
-  await app.register(fn)
+  const app = await createApp()
+  let { data: config } = await loadConfig()
 
-  await app.listen({
-    host: '0.0.0.0',
-    port: getPort()
+  app.register(wellKnownPlugin)
+
+  let info = await app.listen({
+    host: config?.host,
+    port: config?.port
   })
+  
+  console.log(`server listening on ${info}`)
+  console.log(app.printRoutes())
 }
 
 export async function route<
@@ -49,16 +45,25 @@ export async function route<
   opts: RouteOptions<RawServerDefault, RawRequestDefaultExpression<RawServerDefault>, RawReplyDefaultExpression<RawServerDefault>, RouteGeneric, ContextConfig, SchemaCompiler, ZodTypeProvider>
 ) 
 {
+  const app = await createApp()
+  let { data: config } = await loadConfig()
+
+  const url = [config?.baseUrl, opts.url].filter(Boolean).join('/')
+    .replace(/\/\//gi, '/')
+
   app.route({
     ...opts,
-    method: 'GET'
+    url,
+    method: 'GET',
   })
 
+  
   let info = await app.listen({
-    host: '0.0.0.0',
-    port: getPort()
+    host: config?.host,
+    port: config?.port
   })
-
+  
   console.log(`server listening on ${info}`)
+  console.log(app.printRoutes())
 };
 

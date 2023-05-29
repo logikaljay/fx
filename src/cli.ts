@@ -4,6 +4,7 @@ import { cac } from 'cac'
 
 import dev from "./commands/dev"
 import build from "./commands/build"
+import { loadConfig } from './config'
 
 const cli = cac()
 
@@ -13,11 +14,12 @@ function register(mod: any) {
 
 async function main() {
 
-  [
+  let commands = [
     dev,
     build,
-  ].map(register)
+  ]
 
+  commands.map(register)
   cli.name = 'fx'
   cli.version('v1.0.0')
   cli.help()

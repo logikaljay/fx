@@ -2,9 +2,8 @@ import { join } from "path"
 import { Cli } from "../types"
 import { build } from "tsup"
 
-export default function dev(cli: Cli) {
-  let cmd = cli.command('dev', 'Start a development server')
-  cmd.option('-p, --port [port]', "Port to listen on")
+export default function buildCmd(cli: Cli) {
+  let cmd = cli.command('build', 'Build the function')
   cmd.action(handler)
 }
 
