@@ -1,6 +1,6 @@
 {
   "name": "@5oo/fx",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": false,
   "description": "",
   "main": "dist/index.js",
