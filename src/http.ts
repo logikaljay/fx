@@ -56,8 +56,10 @@ export async function route<
   const app = await createApp()
   let { data: config } = await loadConfig()
 
-  const url = [config?.baseUrl, opts.url].filter(Boolean).join('/')
-    .replace(/\/\//gi, '/')
+  let url = [config?.baseUrl, opts.url].filter(Boolean).join("/").replace(/\/\//gi, "/");
+  if (url.endsWith('/')) {
+    url = url.substring(0, url.length - 1);
+  }
 
   app.route({
     ...opts,
