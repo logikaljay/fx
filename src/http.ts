@@ -61,6 +61,7 @@ export async function route<
 
   app.route({
     ...opts,
+    url
   })
 
   let info = await app.listen({
