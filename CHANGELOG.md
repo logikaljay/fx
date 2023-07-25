@@ -1,5 +1,11 @@
 # @5oo/fx
 
+## 0.1.10
+
+### Patch Changes
+
+- d604f6c: Fix route path not working
+
 ## 0.1.9
 
 ### Patch Changes
