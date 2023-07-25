@@ -1,5 +1,11 @@
 # @5oo/fx
 
+## 0.1.9
+
+### Patch Changes
+
+- c3fc2b9: Use the url that gets constructed
+
 ## 0.1.8
 
 ### Patch Changes
