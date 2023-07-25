@@ -60,9 +60,9 @@ export async function route<
     .replace(/\/\//gi, '/')
 
   app.route({
-    ...opts,
-    url,
     method: 'GET',
+    url,
+    ...opts,
   })
 
   let info = await app.listen({
