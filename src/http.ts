@@ -60,8 +60,6 @@ export async function route<
     .replace(/\/\//gi, '/')
 
   app.route({
-    method: 'GET',
-    url,
     ...opts,
   })
 
