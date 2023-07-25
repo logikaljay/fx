@@ -1,5 +1,11 @@
 # @5oo/fx
 
+## 0.1.8
+
+### Patch Changes
+
+- c5052a7: fix: don't overwrite the url and the method
+
 ## 0.1.7
 
 ### Patch Changes
