@@ -10,7 +10,7 @@ export default function buildCmd(cli: Cli) {
 
 async function handler(opts: any) {
   const config = await loadConfig()
-  let index = join(config.basePath, 'index.ts')
+  let index = join(config?.basePath || "", 'index.ts')
   
   build({
     entry: [index],

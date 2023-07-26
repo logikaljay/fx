@@ -68,14 +68,14 @@ async function handler(opts: any) {
     'fx.config.ts': `
     import { defineConfig } from "@5oo/fx"
 
-    defineConfig({
+    export default defineConfig({
       basePath: 'src'
     })
     `
   }
 
   function sanitise(input?: string) {
-    return (input || "").replace(/\n    /gi, '\n')
+    return (input || "").replace(/\n    /gi, '\n').replace('\nimport', 'import')
   }
 
   for (let file in files) {

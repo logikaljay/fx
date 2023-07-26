@@ -9,7 +9,7 @@ const configSchema = z.object({
   wellKnown: z.boolean().default(true),
   baseUrl: z.string().default('')
     .transform(url => url?.endsWith('/') ? url.substring(0, url.length - 1) : url),
-  basePath: z.string().default(process.cwd())
+  basePath: z.string().optional().nullable()
 })
 
 export const defaultConfig = configSchema.parse({})
@@ -17,7 +17,8 @@ export const defaultConfig = configSchema.parse({})
 export type Config = z.output<typeof configSchema>
 
 export function defineConfig(opts: z.input<typeof configSchema>) {
-  return configSchema.parse(opts)
+  config = configSchema.parse(opts)
+  return config
 }
 
 let config: z.infer<typeof configSchema>;
@@ -72,6 +73,7 @@ export async function loadConfig(
     const config = await bundleRequire({
       filepath: configPath
     })
+    console.log(configPath, config.mod)
 
     return configSchema.parse(config.mod.fx || config.mod.default || config.mod)
   }
