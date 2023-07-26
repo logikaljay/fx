@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { loadConfig, defaultConfig, setConfig } from "./config"
 
 describe('config', () => {
-  it('should return the default config if one is not supplied', async () => {
+  it('should return the default config if no config file can be found', async () => {
     let config = await loadConfig()
     expect(config).toEqual(defaultConfig)
   })

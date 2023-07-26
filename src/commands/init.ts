@@ -1,5 +1,8 @@
-import { basename } from "path"
+import { basename, dirname } from "path"
+import { existsSync, mkdirSync, writeFileSync } from "fs"
 import { Cli } from "../types"
+import { execSync } from "child_process"
+import pkg from "../../package.json"
 
 export default function init(cli: Cli) {
   let cmd = cli.command('init', 'Scaffold a new function')
@@ -13,16 +16,16 @@ async function handler(opts: any) {
     name: opts.name ?? basename(process.cwd())
   }
 
-  let files = {
+  let files: Record<string, string> = {
     '.gitignore': `
-      dist
-      node_modules
-      .env*
-      .env
-      .vscode
+    dist
+    node_modules
+    .env*
+    .env
+    .vscode
     `,
 
-    'index.ts': `
+    'src/index.ts': `
     import { http } from "@5oo/fx"
     import { z } from "zod"
     
@@ -57,9 +60,39 @@ async function handler(opts: any) {
         "fastify": "^4.17.0"
       },
       "devDependencies": {
-        "fx": "@5oo/fx"
+        "@5oo/fx": "^${pkg.version}"
       }
     }
+    `,
+
+    'fx.config.ts': `
+    import { defineConfig } from "@5oo/fx"
+
+    defineConfig({
+      basePath: 'src'
+    })
     `
   }
+
+  function sanitise(input?: string) {
+    return (input || "").replace(/\n    /gi, '\n')
+  }
+
+  for (let file in files) {
+    // get basename
+    let pathToFile = dirname(file)
+    
+    // mkdir if needed
+    if (!existsSync(pathToFile)) {
+      mkdirSync(pathToFile, { recursive: true })
+    }
+
+    // scaffold files
+    writeFileSync(file, sanitise(files[file]))
+  }
+
+  execSync('pnpm install', {
+    stdio: ['inherit', 'inherit', 'inherit'],
+    cwd: process.cwd()
+  })
 }
