@@ -1,5 +1,12 @@
 # @5oo/fx
 
+## 0.1.11
+
+### Patch Changes
+
+- e5b87d9: Added basic init command
+- bf3731b: Add tests for config and expand our http tests.
+
 ## 0.1.10
 
 ### Patch Changes
