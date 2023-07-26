@@ -32,17 +32,26 @@ async function createApp() {
 
 export async function register(fn: (app: FastifyInstance) => Promise<void>) {
   const app = await createApp()
-  let { data: config } = await loadConfig()
+  let config = await loadConfig()
 
-  app.register(wellKnownPlugin)
+  // register wellKnown
+  if (!config.wellKnown) {
+    app.register(wellKnownPlugin)
+  }
+
+  // register the function plugin
+  app.register(fn)
 
   let info = await app.listen({
-    host: config?.host,
-    port: config?.port
+    host: config.host,
+    port: config.port
   })
+
   
   console.log(`server listening on ${info}`)
   console.log(app.printRoutes())
+
+  return app
 }
 
 export async function route<
@@ -54,10 +63,10 @@ export async function route<
 ) 
 {
   const app = await createApp()
-  let { data: config } = await loadConfig()
+  let config = await loadConfig()
 
-  let url = [config?.baseUrl, opts.url].filter(Boolean).join("/").replace(/\/\//gi, "/");
-  if (url.endsWith('/')) {
+  let url = [config.baseUrl, opts.url].filter(Boolean).join("/").replace(/\/\//gi, "/");
+  if (url.length > 1 && url.endsWith('/')) {
     url = url.substring(0, url.length - 1);
   }
 
@@ -67,11 +76,13 @@ export async function route<
   })
 
   let info = await app.listen({
-    host: config?.host,
-    port: config?.port
+    host: config.host,
+    port: config.port
   })
   
   console.log(`server listening on ${info}`)
   console.log(app.printRoutes())
+
+  return app
 };
 

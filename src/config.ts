@@ -8,19 +8,29 @@ const configSchema = z.object({
   port: z.number().default(3000),
   wellKnown: z.boolean().default(true),
   baseUrl: z.string().default('')
-    .transform(url => url?.endsWith('/') ? url.substring(0, url.length - 1) : url)
+    .transform(url => url?.endsWith('/') ? url.substring(0, url.length - 1) : url),
+  basePath: z.string().default(process.cwd())
 })
+
+export const defaultConfig = configSchema.parse({})
+
 export type Config = z.output<typeof configSchema>
 
 export function defineConfig(opts: z.input<typeof configSchema>) {
   return configSchema.parse(opts)
 }
 
+let config: z.infer<typeof configSchema>;
+
 export async function loadConfig(
   cwd?: string,
   configFile?: string
-): Promise<{ path?: string, data?: Config }> {
+): Promise<Config> {
 
+  if (config) {
+    return config
+  }
+  
   const configPaths = configFile 
     ? [configFile]
     : [
@@ -30,12 +40,14 @@ export async function loadConfig(
       "fx.config.mjs",
       "fx.config.json",
       "package.json"
-    ].filter(configFile => path.resolve(cwd || process.cwd(), configFile))
+    ]
+    .map(configFile => path.resolve(cwd || process.cwd(), configFile))
+    .filter(configPath => fs.existsSync(configPath))
 
   const configPath = configPaths[0]
   if (configPath) {
     if (configPath.endsWith('.json')) {
-      let configStr = fs.readFileSync(path.join(process.cwd(), configPath)).toString()
+      let configStr = fs.readFileSync(configPath).toString()
       let data;
       try {
         data = JSON.parse(configStr)
@@ -50,10 +62,10 @@ export async function loadConfig(
       }
 
       if (data) {
-        return { path: configPath, data }
+        return data
       }
       else {
-        return {}
+        return defaultConfig
       }
     }
 
@@ -61,11 +73,15 @@ export async function loadConfig(
       filepath: configPath
     })
 
-    return {
-      path: configPath,
-      data: configSchema.parse(config.mod.fx || config.mod.default || config.mod)
-    }
+    return configSchema.parse(config.mod.fx || config.mod.default || config.mod)
   }
 
-  return {}
+  return defaultConfig
+}
+
+export function setConfig(
+  input: z.input<typeof configSchema>
+) {
+  config = configSchema.parse(input)
+  return config
 }

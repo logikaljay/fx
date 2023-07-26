@@ -1,7 +1,8 @@
-import { Cli } from "../types"
-import { spawn } from "child_process"
-import { join } from "path"
 import { build } from "tsup"
+import { join } from "path"
+import { spawn } from "child_process"
+import { Cli } from "../types"
+import { loadConfig } from "../config"
 
 export default function dev(cli: Cli) {
   let cmd = cli.command('dev', 'Start a development server')
@@ -10,7 +11,9 @@ export default function dev(cli: Cli) {
 }
 
 async function handler(opts: any) {
-  let index = join(process.cwd(), 'index.ts')
+  const config = await loadConfig()
+  let index = join(config.basePath, 'index.ts')
+
   build({
     entry: [index],
     splitting: false,

@@ -1,6 +1,7 @@
+import { build } from "tsup"
 import { join } from "path"
 import { Cli } from "../types"
-import { build } from "tsup"
+import { loadConfig } from "../config"
 
 export default function buildCmd(cli: Cli) {
   let cmd = cli.command('build', 'Build the function')
@@ -8,7 +9,9 @@ export default function buildCmd(cli: Cli) {
 }
 
 async function handler(opts: any) {
-  let index = join(process.cwd(), 'index.ts')
+  const config = await loadConfig()
+  let index = join(config.basePath, 'index.ts')
+  
   build({
     entry: [index],
     splitting: false,
