@@ -57,7 +57,8 @@ async function handler(opts: any) {
       "author": "",
       "license": "ISC",
       "dependencies": {
-        "fastify": "^4.17.0"
+        "fastify": "^4.20.0",
+        "zod": "^3.21.4"
       },
       "devDependencies": {
         "@5oo/fx": "^${pkg.version}"
