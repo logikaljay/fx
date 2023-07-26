@@ -14,31 +14,29 @@ async function handler(opts: any) {
   const config = await loadConfig()
   let index = join(config?.basePath || "", 'index.ts')
 
-  console.log(config, index)
+  build({
+    entry: [index],
+    splitting: false,
+    format: 'cjs',
+    target: 'node18',
+    platform: 'node',
+    external: ['esbuild', 'tsup'],
+    clean: true,
+    watch: true,
+    onSuccess: async () => {
+      let proc = spawn("node", ['./dist/index.js'], {
+        stdio: [0, 1, 2, 'ipc'],
+        env: {
+          ...process.env,
+          PORT: opts.p ?? 3000
+        },
+        cwd: process.cwd()
+      })
 
-  // build({
-  //   entry: [index],
-  //   splitting: false,
-  //   format: 'cjs',
-  //   target: 'node18',
-  //   platform: 'node',
-  //   external: ['esbuild', 'tsup'],
-  //   clean: true,
-  //   watch: true,
-  //   onSuccess: async () => {
-  //     let proc = spawn("node", ['./dist/index.js'], {
-  //       stdio: [0, 1, 2, 'ipc'],
-  //       env: {
-  //         ...process.env,
-  //         PORT: opts.p ?? 3000
-  //       },
-  //       cwd: process.cwd()
-  //     })
-
-  //     return async () => {
-  //       console.log(`Change detected. Restarting dev server`)
-  //       proc.kill()
-  //     }
-  //   }
-  // })
+      return async () => {
+        console.log(`Change detected. Restarting dev server`)
+        proc.kill()
+      }
+    }
+  })
 }
