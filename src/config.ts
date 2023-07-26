@@ -73,7 +73,6 @@ export async function loadConfig(
     const config = await bundleRequire({
       filepath: configPath
     })
-    console.log(configPath, config.mod)
 
     return configSchema.parse(config.mod.fx || config.mod.default || config.mod)
   }
