@@ -3,16 +3,15 @@ import { FastifyInstance } from "fastify";
 import { loadConfig } from "../config";
 import fp from "fastify-plugin"
 import { jsonSchemaTransform } from "fastify-type-provider-zod"
-import { zodToJsonSchema } from "zod-to-json-schema"
 
 async function wellKnownPlugin(fastify: FastifyInstance) {
-  const { data } = await loadConfig()
+  const config = await loadConfig()
 
-  if (!data?.wellKnown) {
+  if (!config?.wellKnown) {
     return
   }
 
-  const url = path.join(data.baseUrl||'/', '.well-known/fx-configuration')
+  const url = path.join(config.baseUrl||'/', '.well-known/fx-configuration')
     .replace(/\/\//gi, '/')
 
     
