@@ -17,12 +17,22 @@ async function createChannel(config: Config) {
   return { channel, queue }
 }
 
-export async function listen<Schema extends ZodType>(handler: EventHandler<amqplib.ConsumeMessage, Schema["_output"]>) {
+export async function listen<T extends ZodType>({
+  schema,
+  handler
+}: {
+  schema?: T,
+  handler: EventHandler<amqplib.ConsumeMessage, T["_output"]>
+}) {
   const config = (await loadConfig()).amqp!
   let { channel, queue } = await createChannel(config)
   await channel.consume(queue.queue, async msg => {
     if (msg) {
-      const data = JSON.parse(msg.content.toString()) as Schema["_output"]
+      let data = JSON.stringify(msg.content.toString())
+      if (schema) {
+        data = schema.parse(data)
+      }
+  
       await handler({ ...msg, data })
       if (msg && config.ack) {
         channel.ack(msg)
@@ -31,13 +41,27 @@ export async function listen<Schema extends ZodType>(handler: EventHandler<amqpl
   })
 }
 
-export async function get<Schema extends ZodType>(handler: EventHandler<amqplib.GetMessage, Schema["_output"]>) {
+export async function get<T extends ZodType>({
+  schema,
+  handler
+}: {
+  schema?: T,
+  handler: EventHandler<amqplib.GetMessage, T["_output"]>
+}) {
   const config = (await loadConfig()).amqp!
   let { channel, queue } = await createChannel(config)
   const msg = await channel.get(queue.queue)
   if (msg) {
-    const data = JSON.parse(msg.content.toString()) as Schema["_output"]
+    let data = JSON.stringify(msg.content.toString())
+    if (schema) {
+      data = schema.parse(data)
+    }
+
     await handler({ ...msg, data })
+    if (msg && config.ack) {
+      channel.ack(msg)
+    }
+    
     process.exit(0)
   }
   else {
