@@ -5,7 +5,7 @@ import fp from "fastify-plugin"
 import { jsonSchemaTransform } from "fastify-type-provider-zod"
 
 async function wellKnownPlugin(fastify: FastifyInstance) {
-  const config = await loadConfig()
+  const config = (await loadConfig()).http
 
   if (!config?.wellKnown) {
     return

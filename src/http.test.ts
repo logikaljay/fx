@@ -26,8 +26,10 @@ describe('http', () => {
 
   it('should use the correct url when a baseUrl is set', async () => {
     setConfig({
-      baseUrl: '/api/test',
-      port: 0
+      http: {
+        baseUrl: '/api/test',
+        port: 0
+      }
     })
 
     const payload = { greeting: "hello" }
@@ -51,8 +53,10 @@ describe('http', () => {
 
   it('should use the handle trailing slashes correctly', async () => {
     setConfig({
-      baseUrl: '/api/test',
-      port: 0
+      http: {
+        baseUrl: '/api/test',
+        port: 0
+      }
     })
 
     const payload = { greeting: "hello" }
