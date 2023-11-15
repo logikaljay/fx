@@ -11,7 +11,12 @@ const configSchema = z.object({
     baseUrl: z.string()
       .default('')
       .transform(url => url?.endsWith('/') ? url.substring(0, url.length - 1) : url),
-  }).optional(),
+  }).optional().default({
+    host: '127.0.0.1',
+    port: 3000,
+    wellKnown: true,
+    baseUrl: ''
+  }),
   amqp: z.object({
     uri: z.string(),
     exchange: z.string(),
