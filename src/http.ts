@@ -32,8 +32,8 @@ async function createApp() {
 
 export async function register(fn: (app: FastifyInstance) => Promise<void>) {
   const app = await createApp()
-  let config = await loadConfig()
-
+  let config = (await loadConfig()).http!
+  
   // register wellKnown
   if (!config.wellKnown) {
     app.register(wellKnownPlugin)
@@ -47,7 +47,6 @@ export async function register(fn: (app: FastifyInstance) => Promise<void>) {
     port: config.port
   })
 
-  
   console.log(`server listening on ${info}`)
   console.log(app.printRoutes())
 
@@ -63,7 +62,7 @@ export async function route<
 ) 
 {
   const app = await createApp()
-  let config = await loadConfig()
+  let config = (await loadConfig()).http!
 
   let url = [config.baseUrl, opts.url].filter(Boolean).join("/").replace(/\/\//gi, "/");
   if (url.length > 1 && url.endsWith('/')) {

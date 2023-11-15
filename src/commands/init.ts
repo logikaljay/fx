@@ -40,7 +40,14 @@ async function handler(opts: any) {
       handler: (req, reply) => {
         return reply.send({ name: req.query.name })
       }
-    })    
+    })
+
+    import { amqp } from "@5oo/fx"
+    import { z } from "zod"
+
+    amqp.listen(msg => {
+      console.log("message received!", msg)
+    })
     `,
 
     'package.json': `

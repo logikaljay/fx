@@ -4,11 +4,21 @@ import { z } from "zod"
 import { bundleRequire } from "bundle-require"
 
 const configSchema = z.object({
-  host: z.string().default('127.0.0.1'),
-  port: z.number().default(3000),
-  wellKnown: z.boolean().default(true),
-  baseUrl: z.string().default('')
-    .transform(url => url?.endsWith('/') ? url.substring(0, url.length - 1) : url),
+  http: z.object({
+    host: z.string().default('127.0.0.1'),
+    port: z.number().default(3000),
+    wellKnown: z.boolean().default(true),
+    baseUrl: z.string()
+      .default('')
+      .transform(url => url?.endsWith('/') ? url.substring(0, url.length - 1) : url),
+  }).optional(),
+  amqp: z.object({
+    uri: z.string(),
+    exchange: z.string(),
+    queue: z.string(),
+    pattern: z.string(),
+    ack: z.boolean().default(true),
+  }).optional(),
   basePath: z.string().optional().nullable()
 })
 

@@ -1,4 +1,6 @@
 import * as http from "./http"
+import * as amqp from "./amqp"
 import { defineConfig } from "./config"
 
-export { http, defineConfig}
+
+export { http, amqp, defineConfig}
